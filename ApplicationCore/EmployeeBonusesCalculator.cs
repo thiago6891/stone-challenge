@@ -7,27 +7,34 @@ using System.Linq;
 
 namespace ApplicationCore
 {
-    public class EmployeeBonusesCalculator
+    public class EmployeeBonusesCalculator : IEmployeeBonusesCalculator
     {
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IMinimumWageProvider _minimumWageProvider;
+        private readonly IEmployeesRepository _employeesRepository;
 
-        public EmployeeBonusesCalculator(IDateTimeProvider dateTimeProvider, IMinimumWageProvider minimumWageProvider)
+        public EmployeeBonusesCalculator(
+            IDateTimeProvider dateTimeProvider, 
+            IMinimumWageProvider minimumWageProvider,
+            IEmployeesRepository employeesRepository)
         {
             _dateTimeProvider = dateTimeProvider;
             _minimumWageProvider = minimumWageProvider;
+            _employeesRepository = employeesRepository;
         }
 
-        public IEnumerable<Tuple<Employee, decimal>> CalculateEmployeeBonuses(IEnumerable<Employee> employees)
+        public IEnumerable<Employee> CalculateEmployeeBonuses()
         {
-            return employees.Select(e => new Tuple<Employee, decimal>(
-                e, CalculateBonus(e.GrossSalary, e.Sector, e.AdmissionDate, e.IsIntern)));
+            return _employeesRepository.GetEmployees().Select(e =>
+            {
+                e.Bonus = CalculateBonus(e.GrossSalary, e.Sector, e.AdmissionDate, e.IsIntern);
+                return e;
+            });
         }
 
-        public bool IsPossibleToDistributeBonuses(IEnumerable<Tuple<Employee, decimal>> bonuses, decimal availableMoney)
+        public bool IsPossibleToDistributeBonuses(IEnumerable<decimal> bonuses, decimal availableMoney)
         {
-            var moneyToDistribute = bonuses.Sum(e => e.Item2);
-            return moneyToDistribute <= availableMoney;
+            return bonuses.Sum() <= availableMoney;
         }
 
         private decimal CalculateBonus(decimal grossSalary, Sector sector, DateTime admissionDate, bool isIntern)

@@ -11,8 +11,9 @@ namespace ApplicationCore.Models
         public string JobTitle { get; }
         public decimal GrossSalary { get; }
         public DateTime AdmissionDate { get; }
-
         public bool IsIntern { get; }
+
+        public decimal Bonus { get; set; }
 
         public Employee(
             int registrationNumber,
