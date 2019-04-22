@@ -198,5 +198,43 @@ namespace Tests
             // Assert
             Assert.Equal(expected, actual);
         }
+
+        [Theory]
+        [InlineData(30, 30, 3, true)]
+        [InlineData(31, 30, 3, true)]
+        [InlineData(29, 30, 3, false)]
+        public void IsPossibleToDistributeBonuses_ByDefault_ReturnIfTrueIfMoneyIsEnough(
+            decimal totalMoneyAvailable, 
+            decimal totalMoneyToDistribute, 
+            int totalEmployees,
+            bool expected)
+        {
+            // Arrange
+            const decimal MINIMUM_WAGE = 1000.00M;
+            var CURRENT_DATE = new DateTime(2019, 4, 20);
+
+            var employeesBonuses = new List<Tuple<Employee, decimal>>();
+            for (int e = 0; e < totalEmployees; e++)
+                employeesBonuses.Add(new Tuple<Employee, decimal>(
+                    new Employee(1, "name", Sector.Accounting, "title", 0, CURRENT_DATE, false),
+                    totalMoneyToDistribute / totalEmployees));
+
+            var dateTimeProviderStub = new Mock<IDateTimeProvider>();
+            dateTimeProviderStub.Setup(dtp => dtp.Now)
+                .Returns(CURRENT_DATE);
+            dateTimeProviderStub.Setup(dtp => dtp.CalculateTimeDifferenceInYears(CURRENT_DATE, CURRENT_DATE))
+                .Returns(0.5f);
+
+            var minimumWageProviderStub = new Mock<IMinimumWageProvider>();
+            minimumWageProviderStub.Setup(mwp => mwp.MinimumWage).Returns(MINIMUM_WAGE);
+
+            var calculator = new EmployeeBonusesCalculator(dateTimeProviderStub.Object, minimumWageProviderStub.Object);
+
+            // Act
+            var actual = calculator.IsPossibleToDistributeBonuses(employeesBonuses, totalMoneyAvailable);
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
     }
 }

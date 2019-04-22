@@ -24,6 +24,12 @@ namespace ApplicationCore
                 e, CalculateBonus(e.GrossSalary, e.Sector, e.AdmissionDate, e.IsIntern)));
         }
 
+        public bool IsPossibleToDistributeBonuses(IEnumerable<Tuple<Employee, decimal>> bonuses, decimal availableMoney)
+        {
+            var moneyToDistribute = bonuses.Sum(e => e.Item2);
+            return moneyToDistribute <= availableMoney;
+        }
+
         private decimal CalculateBonus(decimal grossSalary, Sector sector, DateTime admissionDate, bool isIntern)
         {
             const int MONTHS_IN_YEAR = 12;
