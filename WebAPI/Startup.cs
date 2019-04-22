@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ApplicationCore;
+using ApplicationCore.Interfaces;
+using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using WebAPI.Utils;
 
 namespace WebAPI
 {
@@ -25,6 +23,12 @@ namespace WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+            services.AddSingleton<IMinimumWageProvider, MinimumWageProvider>();
+
+            services.AddScoped<IEmployeeBonusesCalculator, EmployeeBonusesCalculator>();
+            services.AddScoped<IEmployeesRepository, EmployeesRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
