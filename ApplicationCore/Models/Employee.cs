@@ -27,10 +27,10 @@ namespace ApplicationCore.Models
             RegistrationNumber = registrationNumber;
             Name = name;
             Sector = sector;
-            IsIntern = isIntern;
-            JobTitle = IsIntern ? "Estagiário" : jobTitle;
+            JobTitle = jobTitle;
             GrossSalary = grossSalary;
             AdmissionDate = admissionDate;
+            IsIntern = isIntern;
         }
     }
 }
