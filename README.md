@@ -16,6 +16,9 @@ O applicativo vai estar rodando em localhost:5000.
 O endpoint pedido pode ser chamado em ***/api/employees/bonuses/{valor_do_bonus}***
 utilizando-se um GET e passando-se o valor a ser distribuído pelos funcionários.
 
+**Obs.:** *A primeira vez que o comando run for executado pode haver uma demora
+devido ao restore dos pacotes.*
+
 ## Banco de Dados
 
 O BD é um SQL Serve que já está pré-populado e hospedado na Azure.
@@ -30,7 +33,8 @@ comando a partir do diretório raiz da solução.
 
 A primeira migração cria as tabelas, e a segunda popula o banco.
 
-Por falta de tempo (e para facilitar), optei por pré-popular o BD via *migrations*.
+Por falta de tempo (e para facilitar os testes), optei por pré-popular o BD via
+*migrations* ao invés de fazer um CRUD de funcionários.
 
 ## Testes
 
