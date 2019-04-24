@@ -33,8 +33,7 @@ namespace WebAPI.Controllers
                 return Ok(result);
             }
             
-            // TODO: remove the bonuses sum from here. This is just for testing purposes.
-            return BadRequest($"Não foi possível distribuir um total de R$ {employees.Sum(e => e.Bonus)} com o volume disponibilizado.");
+            return BadRequest("Não foi possível distribuir os lucros com o volume disponibilizado.");
         }
     }
 }
